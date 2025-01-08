@@ -1,4 +1,6 @@
 ---
+import SiteFooter from "../components/site-footer.astro";
+import SiteHeader from "../components/site-header.astro";
 import "../styles/global.css";
 ---
 
@@ -12,9 +14,11 @@ import "../styles/global.css";
 		<meta name="generator" content={Astro.generator} />
 		<title>Qwark</title>
 	</head>
-	<body class="min-h-screen flex flex-col overflow-x-clip font-serif">
-  <main class="w-site p-4 flex-grow flex flex-col bg-base-100 text-content-100">
-		<slot />
-  </main>
+	<body class="min-h-screen flex flex-col overflow-x-clip font-serif bg-base-100 text-content-100">
+    <SiteHeader />
+    <main class="site-cx px-spx flex-grow flex flex-col">
+      <slot />
+    </main>
+    <SiteFooter />
 	</body>
 </html>
