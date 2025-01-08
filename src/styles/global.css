@@ -1,0 +1,28 @@
+/**
+  https://tailwindcss.com/docs/v4-beta#whats-new-in-v4-0
+**/
+
+@import "tailwindcss";
+
+:root {
+  --site-width: 64rem;
+
+  --color-base-100-x: #eee;
+  --color-content-100-x: #111;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-base-100-x: #111;
+    --color-content-100-x: #eee;
+  }
+}
+
+@theme {
+  --color-base-100: var(--color-base-100-x);
+  --color-content-100: var(--color-content-100-x);
+}
+
+@utility w-site {
+  @apply mx-auto w-full max-w-(--site-width);
+}

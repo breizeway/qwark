@@ -1,3 +1,8 @@
+---
+import "../styles/global.css";
+---
+
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,18 +10,11 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Qwark</title>
 	</head>
-	<body>
+	<body class="min-h-screen flex flex-col overflow-x-clip font-serif">
+  <main class="w-site p-4 flex-grow flex flex-col bg-base-100 text-content-100">
 		<slot />
+  </main>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
