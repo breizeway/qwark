@@ -30,5 +30,5 @@
 }
 
 @utility site-cx {
-  @apply mx-auto w-full max-w-[calc(var(--spacing-smw)+calc(var(--spacing-spx)*2))];
+  @apply mx-auto w-full max-w-(--spacing-smw);
 }
