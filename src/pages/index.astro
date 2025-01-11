@@ -1,11 +1,12 @@
 ---
+import { Timers } from "../components/ common/timers";
 import Root from "../layouts/root.astro";
-import Timers from "../components/timers.astro"
 
 ---
 
 <Root>
   <section class="flex-grow">
-    <Timers class="text-primary-100 test" />
+    <Timers client:only="react"/>
+
   </section>
 </Root>
