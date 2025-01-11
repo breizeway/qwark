@@ -1,6 +1,5 @@
-export const UUID_WORD_COUNT = 3;
+export const ID_WORD_COUNT = 3;
 export const FOUR_LETTER_WORDS_A = [
-  "aahs",
   "able",
   "ably",
   "abut",
@@ -649,7 +648,6 @@ const FOUR_LETTER_WORDS_H = [
   "hits",
   "hive",
   "hoax",
-  "hoes",
   "hogs",
   "hold",
   "hole",

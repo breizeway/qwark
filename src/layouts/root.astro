@@ -1,5 +1,4 @@
 ---
-import SiteFooter from "../components/site-footer.astro";
 import SiteHeader from "../components/site-header.astro";
 import "../styles/global.css";
 ---
@@ -16,9 +15,8 @@ import "../styles/global.css";
 	</head>
 	<body class="min-h-screen flex flex-col overflow-x-clip font-serif bg-base-100 text-content-100">
     <SiteHeader />
-    <main class="site-cx px-spx flex-grow flex flex-col">
+    <main class="site-cx px-spx py-spy flex-grow flex flex-col">
       <slot />
     </main>
-    <SiteFooter />
 	</body>
 </html>
