@@ -29,7 +29,7 @@ export const Timers: React.FC<TimersProps> = ({}) => {
         {!!timers.length ? (
           timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
         ) : (
-          <span>No timers here</span>
+          <span>No timers here. 👀</span>
         )}
       </div>
     </div>

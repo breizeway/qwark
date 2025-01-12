@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+
+interface Props extends HTMLAttributes<"div"> {}
+const props = Astro.props;
+const { class: cls, ...restProps } = props;
+---
+
+<div
+  {...restProps}
+  class={twMerge("[&_svg]:h-[1.2rem] [&_svg]:aspect-square", cls)}
+>
+  <slot />
+</div>
