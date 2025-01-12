@@ -11,7 +11,7 @@
   --color-min-x: #fff;
   --color-max-x: #000;
   --color-content-100-x: #111;
-  --color-divider-x: #666;
+  --color-divider-x: #aaa;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +22,7 @@
     --color-min-x: #000;
     --color-max-x: #fff;
     --color-content-100-x: #eee;
+    --color-divider-x: #444;
   }
 }
 
@@ -50,4 +51,8 @@ button {
 
 input {
   @apply px-2 py-1 bg-min border border-divider rounded-sm w-18;
+}
+
+code {
+  @apply bg-base-300/50 rounded-sm p-0.75 m-[-0.75];
 }

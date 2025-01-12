@@ -33,7 +33,7 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
 
     let interval: number | null = null;
     if (status === "not-started" || status === "running") {
-      interval = setInterval(updateTimer, 200);
+      interval = setInterval(updateTimer, 100);
     }
 
     return () => {
@@ -42,7 +42,7 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
   }, [timerState, refresh]);
 
   return (
-    <div className="border border-primary-100/25 rounded-sm p-2 flex justify-between gap-2">
+    <div className="border border-divider rounded-sm p-2 flex justify-between gap-2">
       <span>{timer.name}</span>
       <span>{timerState.status}</span>
       <span>{originalDuration + " - " + timeLeft}</span>

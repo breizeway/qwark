@@ -64,7 +64,7 @@ export const formatTimerDuration = (duration: TimerDuration): string =>
   [duration.hours, duration.minutes, duration.seconds]
     .filter((t) => t !== undefined)
     .map((t) => String(t).padStart(2, "0"))
-    .join(":");
+    .join(":") || "0";
 
 const TIMER_DURATION_KEYS: (keyof TimerDuration)[] = [
   "hours",
