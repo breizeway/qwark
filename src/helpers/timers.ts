@@ -1,6 +1,6 @@
 import type { Timer, TimerDuration, TimerEventAction } from "../db/types";
 
-interface TimerState {
+export interface TimerState {
   status: "not-started" | "running" | "paused" | "finished";
   msLeft: number;
   lastAction: TimerEventAction;
@@ -26,14 +26,15 @@ export const getTimerState = (timer: Timer): TimerState => {
 
     if (nextEvent?.action === "stop") {
       const timeUsed = nextEvent.time - start;
-      start = 0;
       msLeft -= timeUsed;
+      start = 0;
     }
   }
   if (start) {
     const timeUsed = new Date().getTime() - start;
     msLeft -= timeUsed;
   }
+  msLeft = Math.ceil(msLeft / 1000) * 1000;
 
   const timerState: TimerState = {
     status: "running",

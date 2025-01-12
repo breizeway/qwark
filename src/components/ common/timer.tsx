@@ -32,7 +32,7 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
 
     let interval: number | null = null;
     if (status === "not-started" || status === "running") {
-      interval = setInterval(updateTimer, 1000);
+      interval = setInterval(updateTimer, 200);
     }
 
     return () => {
