@@ -65,3 +65,24 @@ export const formatTimerDuration = (duration: TimerDuration): string =>
     .filter((t) => t !== undefined)
     .map((t) => String(t).padStart(2, "0"))
     .join(":");
+
+const TIMER_DURATION_KEYS: (keyof TimerDuration)[] = [
+  "hours",
+  "minutes",
+  "seconds",
+];
+
+const isTimerDurationKey = (key: unknown): key is keyof TimerDuration =>
+  TIMER_DURATION_KEYS.includes(key as keyof TimerDuration);
+
+export const timerDurationFromForm = (formData: FormData): TimerDuration => {
+  const duration: TimerDuration = {};
+
+  formData.forEach((value, key) => {
+    if (isTimerDurationKey(key) && typeof value === "string" && !!value) {
+      const valueInt = parseInt(value);
+      if (!!valueInt) duration[key] = valueInt;
+    }
+  });
+  return duration;
+};

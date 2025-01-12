@@ -7,13 +7,20 @@
 :root {
   --color-base-100-x: #eee;
   --color-base-200-x: #ddd;
+  --color-base-300-x: #ccc;
+  --color-min-x: #fff;
+  --color-max-x: #000;
   --color-content-100-x: #111;
+  --color-divider-x: #666;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-base-100-x: #111;
-    --color-base-200-x: #222;
+    --color-base-100-x: #222;
+    --color-base-200-x: #181818;
+    --color-base-300-x: #101010;
+    --color-min-x: #000;
+    --color-max-x: #fff;
     --color-content-100-x: #eee;
   }
 }
@@ -26,9 +33,21 @@
   --color-primary-100: #079828;
   --color-base-100: var(--color-base-100-x);
   --color-base-200: var(--color-base-200-x);
+  --color-base-300: var(--color-base-300-x);
+  --color-min: var(--color-min-x);
+  --color-max: var(--color-max-x);
   --color-content-100: var(--color-content-100-x);
+  --color-divider: var(--color-divider-x);
 }
 
 @utility site-cx {
   @apply mx-auto w-full max-w-(--spacing-smw);
+}
+
+button {
+  @apply px-2 py-1 rounded-sm text-xs bg-primary-100 text-white cursor-pointer hover:bg-primary-100/80 whitespace-nowrap;
+}
+
+input {
+  @apply px-2 py-1 bg-min border border-divider rounded-sm w-18;
 }

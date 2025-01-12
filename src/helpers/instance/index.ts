@@ -1,6 +1,6 @@
 import { FOUR_LETTER_WORDS, ID_WORD_COUNT } from "./constants";
 
-export const getInstance = (): string => {
+export const generateInstance = (): string => {
   const words: string[] = [];
 
   for (let i = ID_WORD_COUNT; i--; i > 0) {
@@ -12,4 +12,8 @@ export const getInstance = (): string => {
   }
 
   return words.join("-");
+};
+
+export const getInstance = (url: URL): string | null => {
+  return url.searchParams.get("instance");
 };

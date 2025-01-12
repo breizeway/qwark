@@ -18,6 +18,7 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
     start: 0,
     end: timerState.msLeft,
   });
+  const originalDuration = formatTimerDuration(timer.duration);
   const timeLeft = formatTimerDuration(timeLeftDuration);
 
   const toggleTimer = useToggleTimer();
@@ -41,11 +42,13 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
   }, [timerState, refresh]);
 
   return (
-    <div className="border border-amber-400/20 p-1 flex justify-between gap-2">
+    <div className="border border-primary-100/25 rounded-sm p-2 flex justify-between gap-2">
       <span>{timer.name}</span>
       <span>{timerState.status}</span>
-      <span>{timeLeft}</span>
-      <button onClick={() => toggleTimer(timer)}>Toggle</button>
+      <span>{originalDuration + " - " + timeLeft}</span>
+      <button onClick={() => toggleTimer(timer)}>
+        {timerState.status === "running" ? "Pause" : "Resume"}
+      </button>
       <button onClick={() => deleteTimer(timer.id)}>Delete</button>
     </div>
   );
