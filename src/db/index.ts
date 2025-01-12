@@ -1,15 +1,11 @@
 import dexieCloud from "dexie-cloud-addon";
 import Dexie, { type EntityTable } from "dexie";
 import { fetchTokens } from "./auth";
+import type { Timer } from "./types";
 
 const dexieDbUrl = import.meta.env.PUBLIC_DEXIE_DB_URL;
 
-interface Timer {
-  id: string;
-  instance: string;
-}
-
-const db = new Dexie("test_1", { addons: [dexieCloud] }) as Dexie & {
+const db = new Dexie("test_4", { addons: [dexieCloud] }) as Dexie & {
   timers: EntityTable<
     Timer,
     "id" // primary key "id" (for the typings only)"
@@ -17,7 +13,7 @@ const db = new Dexie("test_1", { addons: [dexieCloud] }) as Dexie & {
 };
 
 db.version(1).stores({
-  timers: "@id, instance", // '@' = auto-generated global ID
+  timers: "@id, instance, duration, events, name",
 });
 
 db.cloud.configure({
@@ -26,5 +22,4 @@ db.cloud.configure({
   fetchTokens,
 });
 
-export type { Timer };
 export { db };

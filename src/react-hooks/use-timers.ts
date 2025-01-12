@@ -9,5 +9,5 @@ export const useTimers = () => {
     db.timers.where("instance").equals(instance).toArray()
   );
 
-  return timers;
+  return timers ?? [];
 };

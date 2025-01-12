@@ -1,5 +1,2 @@
-export const useInstance = () => {
-  const searchParams = new URLSearchParams(window.location.search);
-  console.log(`:::SEARCHPARAMS::: `, searchParams);
-  return searchParams.get("instance") ?? "";
-};
+export const useInstance = () =>
+  new URLSearchParams(window.location.search).get("instance") ?? "";

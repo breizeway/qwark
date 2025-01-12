@@ -1,6 +1,6 @@
 import { FOUR_LETTER_WORDS, ID_WORD_COUNT } from "./constants";
 
-export const getReadableId = (): string => {
+export const getInstance = (): string => {
   const words: string[] = [];
 
   for (let i = ID_WORD_COUNT; i--; i > 0) {
