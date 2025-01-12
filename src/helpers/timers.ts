@@ -60,10 +60,8 @@ export const getTimerState = (timer: Timer): TimerState => {
   return timerState;
 };
 
-export const formatTimerDuration = (duration: TimerDuration): string => {
-  const hours = duration.hours;
-  const minutes = duration.minutes;
-  const seconds = duration.seconds ?? 0;
-
-  return [hours, minutes, seconds].filter((t) => t !== undefined).join(":");
-};
+export const formatTimerDuration = (duration: TimerDuration): string =>
+  [duration.hours, duration.minutes, duration.seconds]
+    .filter((t) => t !== undefined)
+    .map((t) => String(t).padStart(2, "0"))
+    .join(":");
