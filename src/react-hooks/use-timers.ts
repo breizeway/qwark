@@ -8,7 +8,6 @@ export const useTimers = () => {
   const timers = useLiveQuery(() =>
     db.timers.where("instance").equals(instance).toArray()
   );
-  console.log(`:::TIMERS::: `, timers);
 
   return { timers: timers ?? [], loading: !timers };
 };

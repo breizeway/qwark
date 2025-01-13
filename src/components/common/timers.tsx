@@ -25,25 +25,13 @@ export const Timers: React.FC<TimersProps> = ({}) => {
       >
         <TimerForm />
       </form>
-      <table className="w-full border-separate border-spacing-y-2">
-        <thead>
-          <tr>
-            <th align="left">name</th>
-            <th align="left">status</th>
-            <th align="left">time left</th>
-            <th align="right">actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!timers.length && !loading ? (
-            <tr>
-              <th colSpan={5}>No timers here. 👀</th>
-            </tr>
-          ) : (
-            timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
-          )}
-        </tbody>
-      </table>
+      <div className="flex flex-col gap-2">
+        {!timers.length && !loading ? (
+          <span>No timers here. 👀</span>
+        ) : (
+          timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
+        )}
+      </div>
     </div>
   );
 };
