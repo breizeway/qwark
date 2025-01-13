@@ -5,12 +5,15 @@ import { useTimers } from "../../react-hooks/use-timers";
 import { Timer } from "./timer";
 import { useRef } from "react";
 import { timerDurationFromForm } from "../../helpers/timers";
+import Play from "../icons/play";
+import ExclamationTriangle from "../icons/exclamation-triangle";
 
 interface TimersProps {}
 
 export const Timers: React.FC<TimersProps> = ({}) => {
   const { timers, loading } = useTimers();
   const createTimer = useCreateTimer();
+  const clearTimers = useClearTimers();
 
   const formRef = useRef<HTMLFormElement>(null);
   return (
@@ -19,10 +22,19 @@ export const Timers: React.FC<TimersProps> = ({}) => {
         ref={formRef}
         action={async (formData) => {
           const duration = timerDurationFromForm(formData);
-          createTimer(duration);
+          const unsafeName = formData.get("name");
+          const name = typeof unsafeName === "string" ? unsafeName : undefined;
+
+          // TODO: figure out form validation
+          if (Object.values(duration).some((v) => !!v))
+            createTimer(duration, { name });
+
           formRef.current?.reset();
         }}
       >
+        <button className="mb-2" type="button" onClick={clearTimers}>
+          <ExclamationTriangle className="icon" /> Clear Timers Table
+        </button>
         <TimerForm />
       </form>
       <div className="flex flex-col gap-2">
@@ -37,7 +49,6 @@ export const Timers: React.FC<TimersProps> = ({}) => {
 };
 
 function TimerForm() {
-  const clearTimers = useClearTimers();
   const formStatus = useFormStatus();
   const { pending, data } = formStatus;
   const formEmpty = false;
@@ -75,14 +86,11 @@ function TimerForm() {
         &nbsp;seconds
       </label>
       <label>
-        name (optional)&nbsp;
+        name (optional):&nbsp;
         <input name="name" type="text"></input>
       </label>
       <button className="themed" type="submit" disabled={pending || formEmpty}>
-        Create Timer
-      </button>
-      <button type="button" onClick={clearTimers}>
-        Clear Timers
+        <Play className="icon" />
       </button>
     </div>
   );

@@ -1,7 +1,8 @@
 import { intervalToDuration } from "date-fns";
 import type { Timer as TimerData } from "../../db/types";
 import {
-  formatTimerDuration,
+  formatTimeLeft,
+  formatTimeOriginal,
   getProgressGradient,
   getTimerState,
 } from "../../helpers/timers";
@@ -10,6 +11,7 @@ import { useToggleTimer } from "../../react-hooks/use-toggle-timer";
 import { useEffect, useState } from "react";
 import Pause from "../icons/pause";
 import Play from "../icons/play";
+import XMark from "../icons/x-mark";
 
 interface TimerProps {
   timer: TimerData;
@@ -24,8 +26,8 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
     start: 0,
     end: timerState.msLeft,
   });
-  const originalDuration = formatTimerDuration(timer.duration);
-  const timeLeft = formatTimerDuration(timeLeftDuration);
+  const timeOriginal = formatTimeOriginal(timer.duration);
+  const timeLeft = formatTimeLeft(timeLeftDuration);
 
   const toggleTimer = useToggleTimer();
   const deleteTimer = useDeleteTimer();
@@ -53,16 +55,20 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
       className="border-2 border-(--color-timer-progress) p-2 flex justify-between gap-2 timer"
     >
       <span>{timer.name}</span>
-      <span>{timerState.status}</span>
-      <span>{originalDuration + " - " + timeLeft}</span>
-      <button className="icon-button" onClick={() => toggleTimer(timer)}>
-        {timerState.status === "running" ? (
-          <Pause className="icon" />
-        ) : (
-          <Play className="icon" />
-        )}
-      </button>
-      <button onClick={() => deleteTimer(timer.id)}>Delete</button>
+      <span>{timeOriginal}</span>
+      <span className="font-bold">{timeLeft}</span>
+      <div className="flex gap-2">
+        <button className="icon-button" onClick={() => toggleTimer(timer)}>
+          {timerState.status === "running" ? (
+            <Pause className="icon" />
+          ) : (
+            <Play className="icon" />
+          )}
+        </button>
+        <button className="icon-button" onClick={() => deleteTimer(timer.id)}>
+          <XMark className="icon" />
+        </button>
+      </div>
     </div>
   );
 };

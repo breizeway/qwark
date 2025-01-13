@@ -62,11 +62,17 @@ export const getTimerState = (timer: Timer): TimerState => {
   return timerState;
 };
 
-export const formatTimerDuration = (duration: TimerDuration): string =>
+export const formatTimeLeft = (duration: TimerDuration): string =>
   [duration.hours, duration.minutes, duration.seconds]
     .filter((t) => t !== undefined)
     .map((t) => String(t).padStart(2, "0"))
     .join(":") || "0";
+
+export const formatTimeOriginal = (duration: TimerDuration): string =>
+  Object.entries(duration)
+    .filter(([_, v]) => !!v)
+    .map(([k, v]) => `${v}${k[0]}`)
+    .join(", ");
 
 const TIMER_DURATION_KEYS: (keyof TimerDuration)[] = [
   "hours",

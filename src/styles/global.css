@@ -81,6 +81,10 @@
     &:disabled {
       @apply opacity-70 cursor-not-allowed;
     }
+
+    &:has(svg) {
+      @apply inline-flex items-center min-h-0 gap-1;
+    }
   }
 
   input {
