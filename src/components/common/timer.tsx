@@ -20,12 +20,12 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
   const refresh = () => _setRefresh({});
 
   const timerState = getTimerState(timer);
-  const timeLeftDuration = intervalToDuration({
+  const timeLefthuration = intervalToDuration({
     start: 0,
     end: timerState.msLeft,
   });
   const originalDuration = formatTimerDuration(timer.duration);
-  const timeLeft = formatTimerDuration(timeLeftDuration);
+  const timeLeft = formatTimerDuration(timeLefthuration);
 
   const toggleTimer = useToggleTimer();
   const deleteTimer = useDeleteTimer();
@@ -48,21 +48,25 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
   }, [timerState, refresh]);
 
   return (
-    <div
+    <tr
       style={getProgressGradient(timerState.progress)}
-      className="border-2 border-(--color-timer-progress) p-2 flex justify-between gap-2 timer"
+      className="my-1 border-2 border-(--color-timer-progress) p-2 timer [&_th]:border-(--color-timer-progress) [&_th]:border-y-2 [&_th:first-child]:border-l-2 [&_th:last-child]:border-r-2 [&_th]:p-1"
     >
-      <span>{timer.name}</span>
-      <span>{timerState.status}</span>
-      <span>{originalDuration + " - " + timeLeft}</span>
-      <button className="icon-button" onClick={() => toggleTimer(timer)}>
-        {timerState.status === "running" ? (
-          <Pause className="icon" />
-        ) : (
-          <Play className="icon" />
-        )}
-      </button>
-      <button onClick={() => deleteTimer(timer.id)}>Delete</button>
-    </div>
+      <th align="left">{timer.name}</th>
+      <th align="left">{timerState.status}</th>
+      <th align="left">{originalDuration + " - " + timeLeft}</th>
+      <th align="right">
+        <div className="flex w-fit gap-2">
+          <button className="icon-button" onClick={() => toggleTimer(timer)}>
+            {timerState.status === "running" ? (
+              <Pause className="icon" />
+            ) : (
+              <Play className="icon" />
+            )}
+          </button>
+          <button onClick={() => deleteTimer(timer.id)}>Delete</button>
+        </div>
+      </th>
+    </tr>
   );
 };
