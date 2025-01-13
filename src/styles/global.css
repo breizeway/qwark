@@ -5,9 +5,9 @@
 @import "tailwindcss";
 
 :root {
-  --theme-chroma: 0.005;
-  --theme-hue: 110;
-  --theme-chroma-primary: 0.1;
+  --theme-chroma: 0.008;
+  --theme-hue: 100;
+  --theme-chroma-primary: 0.08;
   --theme-hue-primary: calc(120 - var(--theme-hue));
 
   --color-primary-l: oklch(
@@ -71,7 +71,7 @@
 }
 @layer utilities {
   button {
-    @apply px-2 py-1 text-xs font-bold bg-primary-100 text-min cursor-pointer whitespace-nowrap;
+    @apply px-2 py-1 text-sm bg-primary-100 text-min cursor-pointer whitespace-nowrap;
     @apply border-2 border-t-white/30 border-r-white/15 border-b-black/30 border-l-black/15;
 
     &:not(&:disabled):hover {
@@ -107,6 +107,8 @@
 }
 
 @utility icon {
+  --icon-stroke-width: 2;
+
   &:is(svg) {
     @apply size-4;
   }

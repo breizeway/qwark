@@ -95,6 +95,7 @@ export const getProgressGradient = (
   const stop = Math.round(progress * 10000) / 100;
   const color = "var(--color-timer-progress)";
   return {
-    backgroundImage: `linear-gradient(to right, ${color} 0%, ${color} ${stop}%, oklch(0% 0 0 / 0%) ${stop}%, oklch(0% 0 0 / 0%) 100%)`,
+    // backgroundImage: `linear-gradient(to right, ${color} 0%, ${color} ${stop}%, oklch(0% 0 0 / 0%) ${stop}%, oklch(0% 0 0 / 0%) 100%)`,
+    backgroundImage: `linear-gradient(to left, oklch(0% 0 0 / 0%) 0%, oklch(0% 0 0 / 0%) ${stop}%, ${color} ${stop}%, ${color} 100%)`,
   };
 };
