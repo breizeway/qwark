@@ -4,6 +4,7 @@ export interface TimerState {
   status: "not-started" | "running" | "paused" | "finished";
   msLeft: number;
   lastAction: TimerEventAction;
+  progress: number;
 }
 
 const getMsFromDuration = (duration: TimerDuration): number => {
@@ -40,6 +41,7 @@ export const getTimerState = (timer: Timer): TimerState => {
     status: "running",
     msLeft,
     lastAction: timer.events.at(-1)?.action ?? "start",
+    progress: 1 - msLeft / (msDuration || 1),
   };
   const lastEvent = timer.events.at(-1);
   if (
@@ -85,4 +87,14 @@ export const timerDurationFromForm = (formData: FormData): TimerDuration => {
     }
   });
   return duration;
+};
+
+export const getProgressGradient = (
+  progress: number
+): React.HTMLAttributes<HTMLDivElement>["style"] => {
+  const stop = Math.round(progress * 10000) / 100;
+  const color = "var(--color-timer-progress)";
+  return {
+    backgroundImage: `linear-gradient(to right, ${color} 0%, ${color} ${stop}%, oklch(0% 0 0 / 0%) ${stop}%, oklch(0% 0 0 / 0%) 100%)`,
+  };
 };

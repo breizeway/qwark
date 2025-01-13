@@ -9,7 +9,7 @@ const { class: cls, ...restProps } = props;
 
 <div
   {...restProps}
-  class={twMerge("[&_svg]:h-[1.2rem] [&_svg]:aspect-square", cls)}
+  class={twMerge("[&_svg]:size-4 [&_svg]:aspect-square", cls)}
 >
   <slot />
 </div>

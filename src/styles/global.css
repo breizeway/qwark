@@ -5,24 +5,53 @@
 @import "tailwindcss";
 
 :root {
-  --color-base-100-x: #eee;
-  --color-base-200-x: #ddd;
-  --color-base-300-x: #ccc;
-  --color-min-x: #fff;
-  --color-max-x: #000;
-  --color-content-100-x: #111;
-  --color-divider-x: #aaa;
+  --theme-chroma: 0.005;
+  --theme-hue: 110;
+  --theme-chroma-primary: 0.1;
+  --theme-hue-primary: calc(120 - var(--theme-hue));
+
+  --color-primary-l: oklch(
+    55% var(--theme-chroma-primary) var(--theme-hue-primary)
+  );
+  --color-base-100-l: oklch(95% var(--theme-chroma) var(--theme-hue));
+  --color-base-200-l: oklch(90% var(--theme-chroma) var(--theme-hue));
+  --color-base-300-l: oklch(85% var(--theme-chroma) var(--theme-hue));
+  --color-min-l: oklch(100% 0 0);
+  --color-max-l: oklch(0% 0 0);
+  --color-content-100-l: oklch(10% var(--theme-chroma) var(--theme-hue));
+  --color-divider-l: oklch(50% var(--theme-chroma) var(--theme-hue));
+
+  --color-primary-d: oklch(
+    65% var(--theme-chroma-primary) var(--theme-hue-primary)
+  );
+  --color-base-100-d: oklch(20% var(--theme-chroma) var(--theme-hue));
+  --color-base-200-d: oklch(15% var(--theme-chroma) var(--theme-hue));
+  --color-base-300-d: oklch(10% var(--theme-chroma) var(--theme-hue));
+  --color-min-d: oklch(0% 0 0);
+  --color-max-d: oklch(100% 0 0);
+  --color-content-100-d: oklch(95% var(--theme-chroma) var(--theme-hue));
+  --color-divider-d: oklch(30% var(--theme-chroma) var(--theme-hue));
+
+  --color-primary-x: var(--color-primary-l);
+  --color-base-100-x: var(--color-base-100-l);
+  --color-base-200-x: var(--color-base-200-l);
+  --color-base-300-x: var(--color-base-300-l);
+  --color-min-x: var(--color-min-l);
+  --color-max-x: var(--color-max-l);
+  --color-content-100-x: var(--color-content-100-l);
+  --color-divider-x: var(--color-divider-l);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-base-100-x: #222;
-    --color-base-200-x: #181818;
-    --color-base-300-x: #101010;
-    --color-min-x: #000;
-    --color-max-x: #fff;
-    --color-content-100-x: #eee;
-    --color-divider-x: #444;
+    --color-primary-x: var(--color-primary-d);
+    --color-base-100-x: var(--color-base-100-d);
+    --color-base-200-x: var(--color-base-200-d);
+    --color-base-300-x: var(--color-base-300-d);
+    --color-min-x: var(--color-min-d);
+    --color-max-x: var(--color-max-d);
+    --color-content-100-x: var(--color-content-100-d);
+    --color-divider-x: var(--color-divider-d);
   }
 }
 
@@ -31,7 +60,7 @@
   --spacing-spx: 1rem;
   --spacing-spy: 1rem;
 
-  --color-primary-100: #079828;
+  --color-primary-100: var(--color-primary-x);
   --color-base-100: var(--color-base-100-x);
   --color-base-200: var(--color-base-200-x);
   --color-base-300: var(--color-base-300-x);
@@ -40,19 +69,53 @@
   --color-content-100: var(--color-content-100-x);
   --color-divider: var(--color-divider-x);
 }
+@layer utilities {
+  button {
+    @apply px-2 py-1 text-xs font-bold bg-primary-100 text-min cursor-pointer whitespace-nowrap;
+    @apply border-2 border-t-white/30 border-r-white/15 border-b-black/30 border-l-black/15;
+
+    &:not(&:disabled):hover {
+      @apply bg-primary-100/85;
+    }
+
+    &:disabled {
+      @apply opacity-70 cursor-not-allowed;
+    }
+  }
+
+  input {
+    @apply px-2 py-1 bg-min border border-divider;
+
+    &[type="number"] {
+      @apply w-18;
+    }
+  }
+
+  code {
+    @apply inline-block pe-[0.25em] ps-[0.25em] bg-max/10;
+  }
+}
 
 @utility site-cx {
   @apply mx-auto w-full max-w-(--spacing-smw);
 }
 
-button {
-  @apply px-2 py-1 rounded-sm text-xs bg-primary-100 text-white cursor-pointer hover:bg-primary-100/80 whitespace-nowrap;
+@utility icon-button {
+  &:is(button) {
+    @apply aspect-square px-1 flex justify-center items-center;
+  }
 }
 
-input {
-  @apply px-2 py-1 bg-min border border-divider rounded-sm w-18;
+@utility icon {
+  &:is(svg) {
+    @apply size-4;
+  }
 }
 
-code {
-  @apply bg-base-300/50 rounded-sm p-0.75 m-[-0.75];
+@utility timer {
+  --color-timer-progress: color-mix(
+    in lch,
+    var(--color-primary-100) 50%,
+    var(--color-min) 100%
+  );
 }

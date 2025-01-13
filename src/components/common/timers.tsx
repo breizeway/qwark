@@ -38,22 +38,53 @@ export const Timers: React.FC<TimersProps> = ({}) => {
 
 function TimerForm() {
   const clearTimers = useClearTimers();
-  const { pending } = useFormStatus();
+  const formStatus = useFormStatus();
+  console.log(`:::FORMSTATUS::: `, formStatus);
+  const { pending, data } = formStatus;
+  const formEmpty = false;
+  // !Object.keys(timerDurationFromForm(data ?? new FormData())).length;
+  console.log(
+    `:::OBJECT.KEYS(TIMERDURATIONFROMFORM(DATA ?? NEW FORMDATA())::: `,
+    Object.keys(timerDurationFromForm(data ?? new FormData()))
+  );
+
   return (
-    <div className="mb-4 space-x-4">
+    <div className="mb-4 flex flex-wrap gap-4 [&_label]:whitespace-nowrap">
       <label>
-        <input type="number" name="hours" min="0" max="23"></input>
+        <input
+          name="hours"
+          type="number"
+          inputMode="numeric"
+          min="0"
+          max="23"
+        ></input>
         &nbsp;hours
       </label>
       <label>
-        <input type="number" name="minutes" min="0" max="59"></input>
+        <input
+          name="minutes"
+          type="number"
+          inputMode="numeric"
+          min="0"
+          max="59"
+        ></input>
         &nbsp;minutes
       </label>
       <label>
-        <input type="number" name="seconds" min="0" max="59"></input>
+        <input
+          name="seconds"
+          type="number"
+          inputMode="numeric"
+          min="0"
+          max="59"
+        ></input>
         &nbsp;seconds
       </label>
-      <button type="submit" disabled={pending}>
+      <label>
+        name (optional)&nbsp;
+        <input name="name" type="text"></input>
+      </label>
+      <button className="themed" type="submit" disabled={pending || formEmpty}>
         Create Timer
       </button>
       <button type="button" onClick={clearTimers}>
