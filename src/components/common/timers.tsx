@@ -9,7 +9,7 @@ import { timerDurationFromForm } from "../../helpers/timers";
 interface TimersProps {}
 
 export const Timers: React.FC<TimersProps> = ({}) => {
-  const timers = useTimers();
+  const { timers, loading } = useTimers();
   const createTimer = useCreateTimer();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -26,10 +26,10 @@ export const Timers: React.FC<TimersProps> = ({}) => {
         <TimerForm />
       </form>
       <div className="flex flex-col gap-2">
-        {!!timers.length ? (
-          timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
-        ) : (
+        {!timers.length && !loading ? (
           <span>No timers here. 👀</span>
+        ) : (
+          timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
         )}
       </div>
     </div>
@@ -39,14 +39,8 @@ export const Timers: React.FC<TimersProps> = ({}) => {
 function TimerForm() {
   const clearTimers = useClearTimers();
   const formStatus = useFormStatus();
-  console.log(`:::FORMSTATUS::: `, formStatus);
   const { pending, data } = formStatus;
   const formEmpty = false;
-  // !Object.keys(timerDurationFromForm(data ?? new FormData())).length;
-  console.log(
-    `:::OBJECT.KEYS(TIMERDURATIONFROMFORM(DATA ?? NEW FORMDATA())::: `,
-    Object.keys(timerDurationFromForm(data ?? new FormData()))
-  );
 
   return (
     <div className="mb-4 flex flex-wrap gap-4 [&_label]:whitespace-nowrap">
