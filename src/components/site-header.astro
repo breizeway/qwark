@@ -1,8 +1,8 @@
 ---
 import { getInstance } from "../helpers/instance";
 import { getPathWithParams } from "../helpers/routing";
-import Icon from "./common/icon.astro";
 import Copy from "./icons/copy";
+import Save from "./icons/save";
 ---
 
 <header class="site-cx px-spx py-spy flex justify-between items-end">
@@ -16,6 +16,9 @@ import Copy from "./icons/copy";
         >{getInstance(Astro.url)}</code
       ></span
     >
+    <button class="icon-button">
+      <Save className="icon" />
+    </button>
     <button>
       <Copy className="icon" />
       Instance

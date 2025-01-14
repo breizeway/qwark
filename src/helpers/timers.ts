@@ -1,9 +1,10 @@
-import type { Timer, TimerDuration, TimerEventAction } from "../db/types";
+import { intervalToDuration } from "date-fns";
+import type { Timer, TimerDuration } from "../db/types";
 
 export interface TimerState {
   status: "not-started" | "running" | "paused" | "finished";
   msLeft: number;
-  lastAction: TimerEventAction;
+  durationLeft: TimerDuration;
   progress: number;
 }
 
@@ -40,7 +41,7 @@ export const getTimerState = (timer: Timer): TimerState => {
   const timerState: TimerState = {
     status: "running",
     msLeft,
-    lastAction: timer.events.at(-1)?.action ?? "start",
+    durationLeft: {},
     progress: 1 - msLeft / (msDuration || 1),
   };
   const lastEvent = timer.events.at(-1);
@@ -58,6 +59,11 @@ export const getTimerState = (timer: Timer): TimerState => {
     timerState.status = "finished";
     timerState.msLeft = 0;
   }
+
+  timerState.durationLeft = intervalToDuration({
+    start: 0,
+    end: timerState.msLeft,
+  });
 
   return timerState;
 };

@@ -39,7 +39,7 @@ export const Timers: React.FC<TimersProps> = ({}) => {
       </form>
       <div className="flex flex-col gap-2">
         {!timers.length && !loading ? (
-          <span>No timers here. 👀</span>
+          <span>No timers here 👀</span>
         ) : (
           timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
         )}
@@ -54,7 +54,7 @@ function TimerForm() {
   const formEmpty = false;
 
   return (
-    <div className="mb-4 flex flex-wrap gap-4 [&_label]:whitespace-nowrap">
+    <div className="mb-4 flex flex-wrap items-center gap-4 [&_label]:whitespace-nowrap">
       <label>
         <input
           name="hours"
@@ -89,8 +89,12 @@ function TimerForm() {
         name (optional):&nbsp;
         <input name="name" type="text"></input>
       </label>
-      <button className="themed" type="submit" disabled={pending || formEmpty}>
-        <Play className="icon" />
+      <button
+        className="icon-button"
+        type="submit"
+        disabled={pending || formEmpty}
+      >
+        <Play className="icon size-8" />
       </button>
     </div>
   );
