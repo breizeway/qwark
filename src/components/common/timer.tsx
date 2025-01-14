@@ -14,30 +14,42 @@ import { twMerge } from "tailwind-merge";
 
 interface TimerProps {
   timer: TimerData;
+  row: number;
 }
 
-export const Timer: React.FC<TimerProps> = ({ timer }) => {
+export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
   const { progress, status, durationLeft, msLeft } = useTimekeeper(timer);
-  console.log(`:::MSLEFT::: `, msLeft);
   const timeOriginal = formatTimeOriginal(timer.duration);
   const timeLeft = formatTimeLeft(durationLeft);
 
   const toggleTimer = useToggleTimer();
   const deleteTimer = useDeleteTimer();
 
+  const rowStyle = { gridRow: row };
+
   return (
-    <div
-      style={getProgressGradient(progress)}
-      className="border-2 border-(--color-timer-progress) p-2 flex justify-between gap-2 timer"
-    >
-      <span className={twMerge(timer.name ? "flex-1" : "flex-2")}>
+    <div className="contents *:p-2 *:my-auto *:overflow-ellipsis *:overflow-hidden *:whitespace-nowrap">
+      <span
+        style={rowStyle}
+        className={twMerge(
+          "col-start-1",
+          timer.name ? "col-end-2" : "col-end-3"
+        )}
+      >
         {timeOriginal}
       </span>
-      <span className={twMerge(timer.name ? "flex-1" : "flex-0")}>
+      <span style={rowStyle} className={twMerge("col-start-2 col-end-3")}>
         {timer.name}
       </span>
-      <span className="flex-1 font-bold">{timeLeft}</span>
-      <div className="flex-1 flex gap-2 justify-end">
+      <span style={rowStyle} className={twMerge("col-start-3 col-end-4")}>
+        {timeLeft}
+      </span>
+      <div
+        style={rowStyle}
+        className={twMerge(
+          "col-start-4 col-end-5 flex-1 flex gap-2 justify-end"
+        )}
+      >
         <button className="icon-button" onClick={() => toggleTimer(timer)}>
           {status === "running" ? (
             <Pause className="icon" />
@@ -49,6 +61,12 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
           <XMark className="icon" />
         </button>
       </div>
+      <div
+        style={{ ...getProgressGradient(progress), ...rowStyle }}
+        className={twMerge(
+          "timer-progress col-start-1 col-end-5 h-full z-[-1] border-2 border-(--color-timer-progress) p-2 flex justify-between gap-2"
+        )}
+      />
     </div>
   );
 };

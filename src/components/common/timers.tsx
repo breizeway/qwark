@@ -37,11 +37,13 @@ export const Timers: React.FC<TimersProps> = ({}) => {
         </button>
         <TimerForm />
       </form>
-      <div className="flex flex-col gap-2">
+      <div className={`grid grid-cols-4 gap-2`}>
         {!timers.length && !loading ? (
           <span>No timers here 👀</span>
         ) : (
-          timers.map((timer) => <Timer key={timer.id} {...{ timer }} />)
+          timers.map((timer, idx) => (
+            <Timer key={timer.id} row={idx + 1} {...{ timer }} />
+          ))
         )}
       </div>
     </div>

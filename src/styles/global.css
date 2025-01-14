@@ -7,7 +7,7 @@
 :root {
   --theme-chroma: 0.008;
   --theme-hue: 100;
-  --theme-chroma-primary: 0.08;
+  --theme-chroma-primary: 0.1;
   --theme-hue-primary: calc(120 - var(--theme-hue));
 
   --color-primary-l: oklch(
@@ -124,7 +124,7 @@
   }
 }
 
-@utility timer {
+@utility timer-progress {
   --color-timer-progress: color-mix(
     in lch,
     var(--color-primary-100) 50%,
