@@ -10,6 +10,7 @@ import Pause from "../icons/pause";
 import Play from "../icons/play";
 import XMark from "../icons/x-mark";
 import { useTimekeeper } from "../../react-hooks/use-timekeeper";
+import { twMerge } from "tailwind-merge";
 
 interface TimerProps {
   timer: TimerData;
@@ -29,10 +30,14 @@ export const Timer: React.FC<TimerProps> = ({ timer }) => {
       style={getProgressGradient(progress)}
       className="border-2 border-(--color-timer-progress) p-2 flex justify-between gap-2 timer"
     >
-      <span>{timer.name}</span>
-      <span>{timeOriginal}</span>
-      <span className="font-bold">{timeLeft}</span>
-      <div className="flex gap-2">
+      <span className={twMerge(timer.name ? "flex-1" : "flex-2")}>
+        {timeOriginal}
+      </span>
+      <span className={twMerge(timer.name ? "flex-1" : "flex-0")}>
+        {timer.name}
+      </span>
+      <span className="flex-1 font-bold">{timeLeft}</span>
+      <div className="flex-1 flex gap-2 justify-end">
         <button className="icon-button" onClick={() => toggleTimer(timer)}>
           {status === "running" ? (
             <Pause className="icon" />
