@@ -1,34 +1,37 @@
 import { db } from "../db";
-import type { TimerDuration, TimerEvent } from "../db/types";
+import type { DbTimer, TimerEvent } from "../db/types";
 import { useInstance } from "./use-instance";
-import { add } from "date-fns";
 
-interface TimerOptions {
-  startAdjustment?: TimerDuration;
-  name?: string;
-}
+type NonInputTimerKeys = "id" | "instance" | "events";
+type CreateTimerInput = Omit<DbTimer, NonInputTimerKeys>;
+
+const isNonInputTimerKey = (key: any): key is NonInputTimerKeys => {
+  const check: { [keys in NonInputTimerKeys]: {} } = {
+    id: {},
+    instance: {},
+    events: {},
+  };
+  return !!check[key as NonInputTimerKeys];
+};
 
 export const useCreateTimer = () => {
   const instance = useInstance();
 
-  async function addTimer(
-    duration: TimerDuration,
-    options: TimerOptions | undefined = {}
-  ) {
+  async function addTimer(input: CreateTimerInput) {
+    const scrubbedInput = Object.fromEntries(
+      Object.entries(input).filter(([k]) => !isNonInputTimerKey(k))
+    ) as CreateTimerInput;
+
     let startEvent: TimerEvent = {
       action: "start",
       time: new Date().getTime(),
     };
-    if (options.startAdjustment) {
-      startEvent.time = add(new Date(), options.startAdjustment).getTime();
-    }
 
     try {
       await db.timers.add({
         instance,
-        duration,
         events: [startEvent],
-        name: options.name,
+        ...scrubbedInput,
       });
     } catch (error) {
       console.error(`Failed to add`);

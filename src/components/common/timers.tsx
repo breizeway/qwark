@@ -3,10 +3,17 @@ import { useClearTimers } from "../../react-hooks/use-clear-timers";
 import { useCreateTimer } from "../../react-hooks/use-create-timer";
 import { useTimers } from "../../react-hooks/use-timers";
 import { Timer } from "./timer";
-import { useRef } from "react";
-import { timerDurationFromForm } from "../../helpers/timers";
+import { useMemo, useRef } from "react";
+import { getTimerState, timerDurationFromForm } from "../../helpers/timers";
 import Play from "../icons/play";
 import ExclamationTriangle from "../icons/exclamation-triangle";
+import type { DbTimer } from "../../db/types";
+import { twMerge } from "tailwind-merge";
+
+interface BinnedTimers {
+  active: DbTimer[];
+  recents: DbTimer[];
+}
 
 interface TimersProps {}
 
@@ -14,6 +21,21 @@ export const Timers: React.FC<TimersProps> = ({}) => {
   const { timers, loading } = useTimers();
   const createTimer = useCreateTimer();
   const clearTimers = useClearTimers();
+
+  const binnedTimers = useMemo<BinnedTimers>(() => {
+    const bt: BinnedTimers = { active: [], recents: [] };
+
+    timers.forEach((t) => {
+      const timerState = getTimerState(t);
+      if (timerState.status === "finished") bt.recents.push(t);
+      else bt.active.push(t);
+    });
+
+    bt.recents.reverse();
+    bt.recents.splice(10);
+
+    return bt;
+  }, [timers]);
 
   const formRef = useRef<HTMLFormElement>(null);
   return (
@@ -27,7 +49,7 @@ export const Timers: React.FC<TimersProps> = ({}) => {
 
           // TODO: figure out form validation
           if (Object.values(duration).some((v) => !!v))
-            createTimer(duration, { name });
+            createTimer({ duration, name });
 
           formRef.current?.reset();
         }}
@@ -37,18 +59,35 @@ export const Timers: React.FC<TimersProps> = ({}) => {
         </button>
         <TimerForm />
       </form>
-      <div className={`grid grid-cols-4 gap-2`}>
-        {!timers.length && !loading ? (
-          <span>No timers here 👀</span>
-        ) : (
-          timers.map((timer, idx) => (
-            <Timer key={timer.id} row={idx + 1} {...{ timer }} />
-          ))
-        )}
-      </div>
+      <TimerList loading={loading} timers={binnedTimers.active} />
+
+      <span className="text-xl block mt-8 mb-1">Recents</span>
+      <TimerList loading={loading} timers={binnedTimers.recents} />
     </div>
   );
 };
+
+interface TimerListProps extends React.HTMLAttributes<HTMLDivElement> {
+  timers: DbTimer[];
+  loading: boolean;
+}
+
+const TimerList = ({
+  timers,
+  loading,
+  className,
+  ...divProps
+}: TimerListProps) => (
+  <div className={twMerge("grid grid-cols-4 gap-2", className)} {...divProps}>
+    {!timers.length && !loading ? (
+      <span>No timers here 👀</span>
+    ) : (
+      timers.map((timer, idx) => (
+        <Timer key={timer.id} row={idx + 1} {...{ timer }} />
+      ))
+    )}
+  </div>
+);
 
 function TimerForm() {
   const formStatus = useFormStatus();

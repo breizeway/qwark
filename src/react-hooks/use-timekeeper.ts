@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Timer, TimerDuration } from "../db/types";
+import type { DbTimer, TimerDuration } from "../db/types";
 import { getTimerState, type TimerState } from "../helpers/timers";
 
 const timerStateShouldUpdate = (
@@ -14,7 +14,7 @@ const timerStateShouldUpdate = (
   return durationHasChanged || statusHasChanged;
 };
 
-export const useTimekeeper = (timer: Timer): TimerState => {
+export const useTimekeeper = (timer: DbTimer): TimerState => {
   const [timerState, setTimerState] = useState<TimerState>(
     getTimerState(timer)
   );

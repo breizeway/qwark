@@ -1,9 +1,8 @@
 import { intervalToDuration } from "date-fns";
-import type { Timer, TimerDuration } from "../db/types";
+import type { DbTimer, TimerDuration } from "../db/types";
 
 export interface TimerState {
   status: "not-started" | "running" | "paused" | "finished";
-  msLeft: number;
   durationLeft: TimerDuration;
   progress: number;
 }
@@ -16,12 +15,20 @@ const getMsFromDuration = (duration: TimerDuration): number => {
   );
 };
 
-export const getTimerState = (timer: Timer): TimerState => {
+const calcTimerProgress = (msLeft: number, msDuration: number) => {
+  if (msLeft === 0 || msDuration === 0) return 1;
+  const rawProgress = 1 - msLeft / msDuration;
+  return Math.round(rawProgress * 10_000) / 10_000;
+};
+
+export const getTimerState = (timer: DbTimer): TimerState => {
   const msDuration = getMsFromDuration(timer.duration);
   let msLeft = msDuration;
 
   let start = 0;
   for (const nextEvent of timer.events) {
+    if (nextEvent.time > new Date().getTime()) break;
+
     if (nextEvent?.action === "start") {
       start = nextEvent.time;
     }
@@ -36,43 +43,45 @@ export const getTimerState = (timer: Timer): TimerState => {
     const timeUsed = new Date().getTime() - start;
     msLeft -= timeUsed;
   }
-  msLeft = Math.ceil(msLeft / 1000) * 1000;
+  msLeft = msLeft < 0 ? 0 : msLeft;
 
   const timerState: TimerState = {
     status: "running",
-    msLeft,
     durationLeft: {},
-    progress: 1 - msLeft / (msDuration || 1),
+    progress: calcTimerProgress(msLeft, msDuration),
   };
   const lastEvent = timer.events.at(-1);
-  if (
-    timer.events.length === 1 &&
-    (lastEvent?.time ?? 0) > new Date().getTime()
-  ) {
+  if ((lastEvent?.time ?? 0) > new Date().getTime()) {
     timerState.status = "not-started";
-    timerState.msLeft = msDuration;
   } else if (msLeft > 0 && lastEvent?.action === "stop") {
     timerState.status = "paused";
   } else if (msLeft > 0 && lastEvent?.action === "start") {
     timerState.status = "running";
   } else {
     timerState.status = "finished";
-    timerState.msLeft = 0;
   }
 
   timerState.durationLeft = intervalToDuration({
     start: 0,
-    end: timerState.msLeft,
+    end: Math.ceil(msLeft / 1000) * 1000,
   });
 
   return timerState;
 };
 
-export const formatTimeLeft = (duration: TimerDuration): string =>
-  [duration.hours, duration.minutes, duration.seconds]
-    .filter((t) => t !== undefined)
+export const formatTimeLeft = (duration: TimerDuration): string => {
+  let timeLeft = [
+    duration.hours ?? 0,
+    duration.minutes ?? 0,
+    duration.seconds ?? 0,
+  ]
     .map((t) => String(t).padStart(2, "0"))
-    .join(":") || "0";
+    .join(":");
+
+  while (timeLeft.startsWith("00:")) timeLeft = timeLeft.replace("00:", "");
+  if (timeLeft === "00") timeLeft = "--:--";
+  return timeLeft;
+};
 
 export const formatTimeOriginal = (duration: TimerDuration): string =>
   Object.entries(duration)
@@ -107,7 +116,6 @@ export const getProgressGradient = (
   const stop = Math.round(progress * 10000) / 100;
   const color = "var(--color-timer-progress)";
   return {
-    // backgroundImage: `linear-gradient(to right, ${color} 0%, ${color} ${stop}%, oklch(0% 0 0 / 0%) ${stop}%, oklch(0% 0 0 / 0%) 100%)`,
     backgroundImage: `linear-gradient(to left, oklch(0% 0 0 / 0%) 0%, oklch(0% 0 0 / 0%) ${stop}%, ${color} ${stop}%, ${color} 100%)`,
   };
 };

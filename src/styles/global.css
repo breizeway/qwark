@@ -5,7 +5,7 @@
 @import "tailwindcss";
 
 :root {
-  --theme-chroma: 0.008;
+  --theme-chroma: 0.01;
   --theme-hue: 100;
   --theme-chroma-primary: 0.1;
   --theme-hue-primary: calc(120 - var(--theme-hue));
@@ -130,4 +130,39 @@
     var(--color-primary-100) 50%,
     var(--color-min) 100%
   );
+}
+
+@utility stealth-input {
+  &:is(input) {
+    /* all: initial; */
+    @apply border-0 bg-transparent text-current p-0 outline-0;
+  }
+}
+
+@utility input-sizer {
+  display: inline-grid;
+  vertical-align: top;
+  align-items: center;
+  position: relative;
+
+  &::after,
+  input,
+  textarea {
+    width: auto;
+    min-width: 1em;
+    grid-area: 1 / 2;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    resize: none;
+    background: none;
+    appearance: none;
+    border: none;
+  }
+
+  &::after {
+    content: attr(data-value);
+    visibility: hidden;
+    white-space: pre-wrap;
+  }
 }

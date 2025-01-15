@@ -1,8 +1,8 @@
 import { db } from "../db";
-import type { Timer, TimerEvent } from "../db/types";
+import type { DbTimer, TimerEvent } from "../db/types";
 
 export const useToggleTimer = () => {
-  async function toggleTimer(timer: Timer) {
+  async function toggleTimer(timer: DbTimer) {
     const lastAction = timer.events.at(-1)?.action ?? "start";
     const nextEvent: TimerEvent = {
       action: lastAction === "start" ? "stop" : "start",

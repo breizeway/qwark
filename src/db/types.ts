@@ -8,7 +8,7 @@ export interface TimerEvent {
   time: number;
 }
 
-export interface Timer {
+export interface DbTimer {
   id: string;
   instance: string;
   duration: TimerDuration;

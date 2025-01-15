@@ -1,4 +1,4 @@
-import type { Timer as TimerData } from "../../db/types";
+import { type DbTimer } from "../../db/types";
 import {
   formatTimeLeft,
   formatTimeOriginal,
@@ -8,20 +8,24 @@ import { useDeleteTimer } from "../../react-hooks/use-delete-timer";
 import { useToggleTimer } from "../../react-hooks/use-toggle-timer";
 import Pause from "../icons/pause";
 import Play from "../icons/play";
-import XMark from "../icons/x-mark";
 import { useTimekeeper } from "../../react-hooks/use-timekeeper";
 import { twMerge } from "tailwind-merge";
+import Refresh from "../icons/refresh";
+import { useCreateTimer } from "../../react-hooks/use-create-timer";
+import Trash from "../icons/trash";
 
 interface TimerProps {
-  timer: TimerData;
+  timer: DbTimer;
   row: number;
 }
 
 export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
-  const { progress, status, durationLeft, msLeft } = useTimekeeper(timer);
+  const { progress, status, durationLeft } = useTimekeeper(timer);
+
   const timeOriginal = formatTimeOriginal(timer.duration);
   const timeLeft = formatTimeLeft(durationLeft);
 
+  const createTimer = useCreateTimer();
   const toggleTimer = useToggleTimer();
   const deleteTimer = useDeleteTimer();
 
@@ -38,27 +42,34 @@ export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
       >
         {timeOriginal}
       </span>
-      <span style={rowStyle} className={twMerge("col-start-2 col-end-3")}>
+      <span style={rowStyle} className="col-start-2 col-end-3">
         {timer.name}
       </span>
-      <span style={rowStyle} className={twMerge("col-start-3 col-end-4")}>
+      <span
+        style={rowStyle}
+        className="col-start-3 col-end-4 text-xl font-mono"
+      >
         {timeLeft}
       </span>
       <div
         style={rowStyle}
-        className={twMerge(
-          "col-start-4 col-end-5 flex-1 flex gap-2 justify-end"
-        )}
+        className="col-start-4 col-end-5 flex-1 flex gap-2 justify-end"
       >
-        <button className="icon-button" onClick={() => toggleTimer(timer)}>
-          {status === "running" ? (
+        {status === "running" ? (
+          <button className="icon-button" onClick={() => toggleTimer(timer)}>
             <Pause className="icon" />
-          ) : (
+          </button>
+        ) : status === "paused" ? (
+          <button className="icon-button" onClick={() => toggleTimer(timer)}>
             <Play className="icon" />
-          )}
-        </button>
+          </button>
+        ) : (
+          <button className="icon-button" onClick={() => createTimer(timer)}>
+            <Refresh className="icon" />
+          </button>
+        )}
         <button className="icon-button" onClick={() => deleteTimer(timer.id)}>
-          <XMark className="icon" />
+          <Trash className="icon" />
         </button>
       </div>
       <div

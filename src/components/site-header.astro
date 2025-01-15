@@ -11,11 +11,18 @@ import Save from "./icons/save";
     class="text-2xl text-primary-100 font-bold">Qwark</a
   >
   <div class="flex gap-2 items-center">
-    <span
-      >Your instance: <code class="whitespace-nowrap"
-        >{getInstance(Astro.url)}</code
-      ></span
-    >
+    <div>
+      <label class="input-sizer font-mono" data-value={getInstance(Astro.url)}
+        ><span class="font-serif">Your instance:&nbsp;</span><input
+          class="stealth-input"
+          value={getInstance(Astro.url)}
+          type="text"
+          oninput="this.parentNode.dataset.value = this.value"
+          size="4"
+          autocomplete="off"
+        />
+      </label>
+    </div>
     <button class="icon-button">
       <Save className="icon" />
     </button>

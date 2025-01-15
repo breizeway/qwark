@@ -1,13 +1,13 @@
 import dexieCloud from "dexie-cloud-addon";
 import Dexie, { type EntityTable } from "dexie";
 import { fetchTokens } from "./auth";
-import type { Timer } from "./types";
+import type { DbTimer } from "./types";
 
 const dexieDbUrl = import.meta.env.PUBLIC_DEXIE_DB_URL;
 
 const db = new Dexie("test_4", { addons: [dexieCloud] }) as Dexie & {
   timers: EntityTable<
-    Timer,
+    DbTimer,
     "id" // primary key "id" (for the typings only)"
   >;
 };
