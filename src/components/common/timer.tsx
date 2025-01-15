@@ -24,10 +24,10 @@ interface TimerProps {
 export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
   const { progress, status, durationLeft } = useTimekeeper(timer);
 
-  const checkedIfFinished = useRef<boolean>(status === "finished");
-  if (!checkedIfFinished.current && status === "finished") {
+  const isFinished = useRef<boolean>(status === "finished");
+  if (!isFinished.current && status === "finished") {
     dispatchTimerEvent({ timerId: timer.id, eventId: "finished" });
-    checkedIfFinished.current = true;
+    isFinished.current = true;
   }
 
   const timeOriginal = formatTimeOriginal(timer.duration);
