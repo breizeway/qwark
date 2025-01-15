@@ -9,6 +9,7 @@ import Play from "../icons/play";
 import ExclamationTriangle from "../icons/exclamation-triangle";
 import type { DbTimer } from "../../db/types";
 import { twMerge } from "tailwind-merge";
+import { useTimerEvents } from "../../react-hooks/use-timer-events";
 
 interface BinnedTimers {
   active: DbTimer[];
@@ -19,6 +20,9 @@ interface TimersProps {}
 
 export const Timers: React.FC<TimersProps> = ({}) => {
   const { timers, loading } = useTimers();
+
+  const { finished } = useTimerEvents();
+
   const createTimer = useCreateTimer();
   const clearTimers = useClearTimers();
 
@@ -35,7 +39,7 @@ export const Timers: React.FC<TimersProps> = ({}) => {
     bt.recents.splice(10);
 
     return bt;
-  }, [timers]);
+  }, [timers, finished]);
 
   const formRef = useRef<HTMLFormElement>(null);
   return (

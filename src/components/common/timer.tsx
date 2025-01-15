@@ -13,6 +13,8 @@ import { twMerge } from "tailwind-merge";
 import Refresh from "../icons/refresh";
 import { useCreateTimer } from "../../react-hooks/use-create-timer";
 import Trash from "../icons/trash";
+import { useRef } from "react";
+import { dispatchTimerEvent } from "../../react-hooks/use-timer-events";
 
 interface TimerProps {
   timer: DbTimer;
@@ -21,6 +23,12 @@ interface TimerProps {
 
 export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
   const { progress, status, durationLeft } = useTimekeeper(timer);
+
+  const checkedIfFinished = useRef<boolean>(status === "finished");
+  if (!checkedIfFinished.current && status === "finished") {
+    dispatchTimerEvent({ timerId: timer.id, eventId: "finished" });
+    checkedIfFinished.current = true;
+  }
 
   const timeOriginal = formatTimeOriginal(timer.duration);
   const timeLeft = formatTimeLeft(durationLeft);
