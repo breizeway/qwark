@@ -24,12 +24,6 @@ interface TimerProps {
 export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
   const { progress, status, durationLeft } = useTimekeeper(timer);
 
-  const isFinished = useRef<boolean>(status === "finished");
-  if (!isFinished.current && status === "finished") {
-    dispatchTimerEvent({ timerId: timer.id, eventId: "finished" });
-    isFinished.current = true;
-  }
-
   const timeOriginal = formatTimeOriginal(timer.duration);
   const timeLeft = formatTimeLeft(durationLeft);
 
@@ -38,6 +32,12 @@ export const Timer: React.FC<TimerProps> = ({ timer, row }) => {
   const deleteTimer = useDeleteTimer();
 
   const rowStyle = { gridRow: row };
+
+  const isFinished = useRef<boolean>(status === "finished");
+  if (!isFinished.current && status === "finished") {
+    dispatchTimerEvent({ timerId: timer.id, eventId: "finished" });
+    isFinished.current = true;
+  }
 
   return (
     <div className="contents *:p-2 *:my-auto *:overflow-ellipsis *:overflow-hidden *:whitespace-nowrap">
